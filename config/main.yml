@@ -1,2 +1,6 @@
 
 service_agent_conf_path: "/test-projects-proxy/logs"
+mongo:
+ host: localhost
+ port: 27017
+ database: test

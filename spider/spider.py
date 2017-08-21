@@ -13,24 +13,22 @@ logger = logging.getLogger(__name__)
 
 
 class Spider(object):
-    def __init__(self, placeFrom, placeTo, main_config):
+    def __init__(self, placeFrom, main_config):
 
         self.placeFrom = placeFrom
-        self.placeTo = placeTo
         self.manager = ConnectManager(path_user_agents=os.path.join(config_path, "userAgents.txt"), service_log=main_config.service_agent_conf_path)
 
-    def load(self, listUrls):
+    def load(self, url):
+        data = {'url': None, 'document': None}
 
-        result = {}
+        driver = self.manager.driver()
+        driver.get(self.placeFrom + url)
 
-        for url in listUrls:
+        data['url'] = url
+        data['document'] =driver.page_source
+        driver.quit()
 
-            driver = self.manager.driver()
-            driver.get(self.placeFrom + url)
-            result[url] = driver.page_source
-            driver.quit()
-
-        return result
+        return data
 
 
 if __name__ == "__main__":
@@ -44,5 +42,5 @@ if __name__ == "__main__":
     listUrls = ["search/?{}".format(result)]
     print(listUrls)
     main_config = Config.setup_main_config(os.path.join(config_path, 'main.yml'))
-    sp = Spider(placeFrom=fromX, placeTo=toX, main_config=main_config)
+    sp = Spider(placeFrom=fromX, main_config=main_config)
     result = sp.load(listUrls)

@@ -5,6 +5,7 @@ from lxml.html.clean import Cleaner
 import logging.config
 from io import StringIO, BytesIO
 from collections import namedtuple
+import json
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 logging.config.fileConfig(os.path.join(os.path.join(CURRENT_DIR,'..','config'), 'logging.conf'))
@@ -13,9 +14,10 @@ logger = logging.getLogger(__name__)
 from lxml.html.soupparser import fromstring
 from helper.config import Config
 
+
 class Parse:
+
     def __init__(self, buffer, config_path=None):
-        logger.debug("parse")
         self.buffer = buffer
         self.config = Config.setup_main_config(os.path.join(config_path, 'yandex.yml'))
         self.result = []
@@ -23,26 +25,35 @@ class Parse:
 
     def make(self):
         tree = fromstring(self.buffer, features="html.parser")
-        matches = tree.xpath(self.config.li)
-        for li in matches:
-            snippet = etree.tostring(self.cleaner.clean_html(li), method="xml", encoding="UTF-8").decode()
-            reffer_tree = fromstring(etree.tostring(li, method="xml", encoding="UTF-8").decode())
-            self.result.append(snippet)
+        matches = tree.xpath(self.config.ul)
+        ul = matches[0]
+        lis = ul.xpath(self.config.li)
+        data = {}
+        data['pages'] = json.loads(tree.xpath(self.config.pages)[0])
+        data['data'] = []
 
-    @property
-    def cleaner(self):
-        if not self._cleaner:
-            cleaner_i = Cleaner()
-            cleaner_i.javascript = True
-            cleaner_i.style = True
-            cleaner_i.meta = True
-            cleaner_i.safe_attrs_only = True
-            cleaner_i.remove_tags = ['div', 'i', 'span', 'b']
-            cleaner_i.safe_attrs = ['href']
+        for li in lis:
+            cleaner = self.cleaner_li()
+            tmp = {}
+            tmp['snippet'] = etree.tostring(cleaner.clean_html(li), method="xml", encoding="UTF-8").decode()
+            tree_temp = fromstring(tmp['snippet'], features="html.parser")
+            href = tree_temp.xpath(self.config.href)
+            tmp['href'] = href[0]
 
-            self._cleaner = cleaner_i
+            data['data'].append(tmp)
 
-        return self._cleaner
+        self.result = data
+
+    def cleaner_li(self):
+        cleaner = Cleaner()
+        cleaner.javascript = True
+        cleaner.style = True
+        cleaner.meta = True
+        cleaner.safe_attrs_only = True
+        cleaner.remove_tags = ['i', 'span', 'b', 'li']
+        cleaner.safe_attrs = ['href']
+
+        return cleaner
 
 
 if __name__ == "__main__":
