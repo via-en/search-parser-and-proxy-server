@@ -1,0 +1,73 @@
+Сервисы:
+Shipyard: http://79.135.230.130:20088
+Логин/Парольadmin/shipyardDocker
+Registry: 79.135.230.130:20050
+Чтобы он заработал - необходимо вставить в файл
+/etc/docker/daemon.json{"insecure-registries":["79.135.230.130:20050"]}
+и перезапустить сервис командой$ sudo service docker restart
+после этого можно сделать
+$ docker login 79.135.230.130:20050и ввести любой логин/пароль
+после этого можно пушить туда образы.
+PyPi Server: http://79.135.230.130:20081
+Redis: 79.135.230.130:20379
+Reids Commander: http://79.135.230.130:20378
+RabbitMQ: http://79.135.230.130:20672
+RabbitMQ Manager: http://79.135.230.130:25672
+Логин/Пароль
+test/test
+MongoDB: http://79.135.230.130:20707
+
+
+
+# параметры кролика
+rabbit_conf = {
+  "host": "192.168.14.179:5672",
+  "queue": "tempQuery",
+  "username": "test",
+  "password": "test",
+  "autodelete": False,
+  "durable": True,
+  "msecsttl": 0
+}
+
+# общие для всех создаваемых тасков параметры
+task_config = {
+  "priority": 5,
+  "mongoServerName": "mongodb://127.0.0.1:27017/",
+  "mongoDataBaseName": "Twitter",
+  "mongoCollectionName": "Posts",
+  "morphologyEngine": 1,
+  "syntaxEngine": 1,
+  "sentimentEngine": 1,
+  "langDetectEngine": 1,
+  "indexationEngine": 1,
+  "rubricationEngine": 1,
+  "annotationEngine": 1,
+  "wawesEngine": 1,
+  "geotagEngine": 1,
+  "artificialEngine": 1,
+  "specialQueries": [
+    "aaa",
+    "bbb"
+  ],
+  "language": 0
+}
+
+task_factory = TextParseTaskFactory(rabbit_conf, task_config)
+
+db = init_connection('mongodb://127.0.0.1:27017/TestDB')
+yandex = db.yandex
+record = {'url': "https://habrahabr.ru/post/336034/"}
+
+record_id = yandex.insert_one(record).inserted_id
+logger.debug(record_id)
+
+task1 = task_factory.build(_mongoIDsSerialized='123')
+task1.send()
+
+task2 = task_factory.build(_mongoIDsSerialized='1234')
+task2.send()
+
+#pip install crawler_base --extra-index-url http://79.135.230.130:20081/simple/ --trusted-host 79.135.230.130
+#pip install mongo_structures --extra-index-url http://79.135.230.130:20081/simple/ --trusted-host 79.135.230.130
+#pip install rabbit-tasks --extra-index-url http://79.135.230.130:20081/simple/ --trusted-host 79.135.230.130

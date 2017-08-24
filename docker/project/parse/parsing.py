@@ -1,18 +1,16 @@
-import os, sys
-from lxml import etree
-from  lxml.etree import ElementTree
-from lxml.html.clean import Cleaner
-import logging.config
-from io import StringIO, BytesIO
-from collections import namedtuple
 import json
+import logging.config
+import os
+
+from lxml import etree
+from lxml.html.clean import Cleaner
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 logging.config.fileConfig(os.path.join(os.path.join(CURRENT_DIR,'..','config'), 'logging.conf'))
 logger = logging.getLogger(__name__)
 
 from lxml.html.soupparser import fromstring
-from helper.config import Config
+from docker.project.helper import Config
 
 
 class Parse:

@@ -1,11 +1,14 @@
-from urllib.parse import urlencode, quote_plus
-import os, sys
+import datetime
 import logging.config
+import os
+import sys
+from urllib.parse import urlencode, quote_plus
+
 from helper.config import Config
-from spider.spider import Spider
 from parse.parsing import Parse
 from pymongo import MongoClient
-import datetime
+
+from docker.project.spider import Spider
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
 
@@ -92,8 +95,8 @@ class Process:
         pages_result.update(parse.result)
         self.main_result.append(pages_result)
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
 
     payload = {'text': 'пластиковые окна'}
     # payload = {'text': 'пластиковые окна','p':'2'}

@@ -1,8 +1,11 @@
-from urllib.parse import urlencode, quote_plus
-import os, sys
 import logging.config
-from spider.connect import ConnectManager
+import os
+import sys
+from urllib.parse import urlencode, quote_plus
+
 from helper.config import Config
+
+from docker.project.spider import ConnectManager
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
 
