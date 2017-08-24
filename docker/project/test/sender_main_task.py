@@ -3,7 +3,7 @@ from rabbit_tasks import CrawlerTaskFactory
 rabbit_config = {
   'username': 'test',
   'password': 'test',
-  'host': '79.135.230.130:20672',
+  'host': '172.17.100.169:5672',
   'queue': 'testtesttest',
   'autodelete': False,
   'durable': True,
@@ -20,7 +20,7 @@ task_factory = CrawlerTaskFactory(rabbit_config, task_base)
 # Отправка тасков
 # обязательные поля
 task = {
-  'mongoServerName': 'mongodb://79.135.230.130:20707',
+  'mongoServerName': 'mongodb://172.17.100.168:2375',
   'mongoDataBaseName': 'YandexData',
   'mongoCollectionName': 'Posts',
   'snTag': 'YA',
