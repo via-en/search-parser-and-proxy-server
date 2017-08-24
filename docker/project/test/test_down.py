@@ -1,39 +1,52 @@
 import logging.config
 import os
 import sys
-
-from crawler_base import TaskManager
-from crawler_base.run import main
-
-from docker.project.helper import Config
+from rabbit_tasks import TextParseTaskFactory
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
+from helper.config import Config
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
-config_path = os.path.join(CURRENT_DIR, 'config')
+config_path = os.path.join(CURRENT_DIR,'../','config')
 logging.config.fileConfig(os.path.join(config_path, 'logging.conf'))
 logger = logging.getLogger(__name__)
 
 main_config = Config.setup_main_config(os.path.join(config_path, 'main.yml'))
 
-config = {
-  "mongoServerName": "mongodb://127.0.0.1:27017/",
-  "mongoDataBaseName": "Twitter",
-  "mongoCollectionName": "Posts",
-  "snTag": "",
-  "crawlID": "",
 
+rabbit_conf = {
+  "host": "172.17.100.169:5672",
+  "queue": "tempQuery",
+  "username": "test",
+  "password": "test",
+  "autodelete": False,
+  "durable": True,
+  "msecsttl": 0
 }
 
-class SomeTaskManager(TaskManager):
-  def __init__(self, config):
-    super().__init__(config)
+task_config = {
+  "priority": 5,
+  "mongoServerName": "mongodb://172.17.100.168:2375/",
+  "mongoDataBaseName": "YandexData",
+  "mongoCollectionName": "Posts",
+  "morphologyEngine": 1,
+  "syntaxEngine": 1,
+  "sentimentEngine": 1,
+  "langDetectEngine": 1,
+  "indexationEngine": 1,
+  "rubricationEngine": 1,
+  "annotationEngine": 1,
+  "wawesEngine": 1,
+  "geotagEngine": 1,
+  "artificialEngine": 1,
+  "specialQueries": [
+    "aaa",
+    "bbb"
+  ],
+  "language": 0
+}
 
-  def _callback(self, task):
-    logger.debug(task.crawlID)
+task_factory = TextParseTaskFactory(rabbit_conf, task_config)
 
-    # if self._task_factory is not None:
-    #   self._task_factory.build(_mongoIDsSerialized=str(mongo_id)).send()
-
-if __name__ == '__main__':
-  main(SomeTaskManager)
+task1 = task_factory.build(_mongoIDsSerialized='599d84c4f89bca2afc8a2e80')
+task1.send()

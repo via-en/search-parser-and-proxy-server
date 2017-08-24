@@ -14,12 +14,12 @@ FROM ubuntu:16.04
  RUN conda env create -f environment.yml
  RUN conda env list && conda update conda -y
  RUN /bin/bash -c "source activate $MY_CONDA"
- RUN pip install crawler_base --extra-index-url http://79.135.230.130:20081/simple/ --trusted-host 79.135.230.130
- RUN pip install mongo_structures --extra-index-url http://79.135.230.130:20081/simple/ --trusted-host 79.135.230.130
- RUN pip install rabbit-tasks --extra-index-url http://79.135.230.130:20081/simple/ --trusted-host 79.135.230.130
+ RUN pip install crawler_base --extra-index-url http://172.17.100.169:8081/simple/ --trusted-host 172.17.100.169
+ RUN pip install mongo_structures --extra-index-url http://172.17.100.169:8081/simple/ --trusted-host 172.17.100.169
+ RUN pip install rabbit-tasks --extra-index-url http://172.17.100.169:8081/simple/ --trusted-host 172.17.100.169
  RUN apt-get install -y uwsgi-plugin-python3
  RUN mkdir /var/log/uwsgi
  RUN pip install uwsgi
  RUN chmod 777 /entrypoint.py
  WORKDIR /usr/src/app
- CMD /entrypoint.py
+ CMD python /entrypoint.py
