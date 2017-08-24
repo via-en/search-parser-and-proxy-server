@@ -4,7 +4,7 @@ FROM ubuntu:16.04
  ADD environment.yml /
  ADD utils/entrypoint.py /
  ENV CONDA_DIR /home/lenovo
- ENV MY_CONDA /home/lenovo/envs/proxy
+ ENV MY_CONDA /home/lenovo/envs/test
  RUN wget --quiet https://repo.continuum.io/miniconda/Miniconda3-3.9.1-Linux-x86_64.sh && \
       /bin/bash /Miniconda3-3.9.1-Linux-x86_64.sh -b -p $CONDA_DIR && \
       rm Miniconda3-3.9.1-Linux-x86_64.sh && \
@@ -14,6 +14,9 @@ FROM ubuntu:16.04
  RUN conda env create -f environment.yml
  RUN conda env list && conda update conda -y
  RUN /bin/bash -c "source activate $MY_CONDA"
+ RUN pip install crawler_base --extra-index-url http://79.135.230.130:20081/simple/ --trusted-host 79.135.230.130
+ RUN pip install mongo_structures --extra-index-url http://79.135.230.130:20081/simple/ --trusted-host 79.135.230.130
+ RUN pip install rabbit-tasks --extra-index-url http://79.135.230.130:20081/simple/ --trusted-host 79.135.230.130
  RUN apt-get install -y uwsgi-plugin-python3
  RUN mkdir /var/log/uwsgi
  RUN pip install uwsgi
