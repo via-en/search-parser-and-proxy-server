@@ -1,7 +1,8 @@
 Сервисы:
 Shipyard: http://79.135.230.130:20088
-Логин/Парольadmin/shipyardDocker
-Registry: 79.135.230.130:20050
+Логин/Пароль
+admin/shipyard
+Docker Registry: 79.135.230.130:20050
 Чтобы он заработал - необходимо вставить в файл
 /etc/docker/daemon.json{"insecure-registries":["79.135.230.130:20050"]}
 и перезапустить сервис командой$ sudo service docker restart
@@ -71,3 +72,5 @@ task2.send()
 #pip install crawler_base --extra-index-url http://79.135.230.130:20081/simple/ --trusted-host 79.135.230.130
 #pip install mongo_structures --extra-index-url http://79.135.230.130:20081/simple/ --trusted-host 79.135.230.130
 #pip install rabbit-tasks --extra-index-url http://79.135.230.130:20081/simple/ --trusted-host 79.135.230.130
+
+#docker run --name my-yandex -dti -v "$PWD":/usr/src/app yandex-parser

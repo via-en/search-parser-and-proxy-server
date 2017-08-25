@@ -2,8 +2,8 @@
 service_agent_conf_path: "/tmp"
 main_proccess:
  mongo:
-  host: 172.17.100.168
-  port: 20707
+  host: localhost
+  port: 27017
   database: YandexData
  rabbit:
   host: 172.17.100.169:5672
@@ -21,6 +21,6 @@ post_proccess:
   queue:  tempQuery
  yandex_task:
   mongo:
-   host_url: mongodb://172.17.100.168:2375
+   host_url: mongodb://localhost:27017
    database: YandexData
    collection: Posts

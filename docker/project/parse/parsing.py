@@ -1,6 +1,6 @@
 import json
 import logging.config
-import os
+import os, sys
 
 from lxml import etree
 from lxml.html.clean import Cleaner
@@ -10,7 +10,9 @@ logging.config.fileConfig(os.path.join(os.path.join(CURRENT_DIR,'..','config'), 
 logger = logging.getLogger(__name__)
 
 from lxml.html.soupparser import fromstring
-from docker.project.helper import Config
+sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
+
+from helper.config import Config
 
 
 class Parse:

@@ -5,7 +5,7 @@ from urllib.parse import urlencode, quote_plus
 
 from helper.config import Config
 
-from docker.project.spider import ConnectManager
+from spider.connect import ConnectManager
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
 
@@ -26,9 +26,8 @@ class Spider(object):
 
         driver = self.manager.driver()
         driver.get(self.placeFrom + url)
-
         data['url'] = url
-        data['document'] =driver.page_source
+        data['document'] = driver.page_source
         driver.quit()
 
         return data
