@@ -5,6 +5,7 @@ from random import randint
 import os, sys
 import logging.config
 from datetime import date
+import proxy.pproxy
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 config_path = os.path.join(CURRENT_DIR, '..', 'config')
@@ -32,10 +33,18 @@ class ConnectManager:
 
     def create(self):
 
-        service_args = [
-            # '--proxy=localhost:8080',
-            # '--proxy-type=http',
-        ]
+        try:
+            prx = proxy.pproxy.give_proxy().partition('@')
+            service_args = [
+                '--proxy={}'.format(prx[2]),
+                '--proxy-type=https',
+                '--proxy-auth={}'.format(prx[0]),
+            ]
+        except AttributeError:
+            service_args = [
+                '--proxy={}'.format(prx),
+                '--proxy-type=https',
+            ]
 
         dcap = dict(DesiredCapabilities.PHANTOMJS)
         dcap["phantomjs.page.settings.userAgent"] = self.headers[randint(0, len(self.headers) - 1)]
