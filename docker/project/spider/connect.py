@@ -47,7 +47,14 @@ class ConnectManager:
             ]
 
         dcap = dict(DesiredCapabilities.PHANTOMJS)
-        dcap["phantomjs.page.settings.userAgent"] = self.headers[randint(0, len(self.headers) - 1)]
+        # dcap["phantomjs.page.settings.userAgent"] = self.headers[randint(0, len(self.headers) - 1)]
+        dcap["phantomjs.page.settings.userAgent"] = 'Lynx/2.8.9dev.8 libwww-FM/2.14 SSL-MM/1.4.1 GNUTLS/3.4.9'
+        dcap['phantomjs.page.customHeaders.Accept'] = 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01'
+        dcap['phantomjs.page.customHeaders.Accept-Encoding'] = 'gzip, deflate'
+        dcap['phantomjs.page.customHeaders.Accept-Language'] = 'ru,en-US;q=0.7,en;q=0.3'
+        dcap['phantomjs.page.customHeaders.X-Requested-With'] = 'XMLHttpRequest'
+        dcap['phantomjs.page.customHeaders.Connection'] = 'Keep-Alive'
+        dcap['phantomjs.page.customHeaders.Host'] = 'yandex.ru'
 
         service_log_path = os.path.join(self.service_log, 'ghostdriver.log.' + str(date.today()))
 
