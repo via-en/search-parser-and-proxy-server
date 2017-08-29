@@ -20,9 +20,9 @@ download_url = 'http://api.foxtools.ru/v2/Proxy.txt' \
 proxy_list = []
 proxy_list_cleaned = []
 scan_dir = ''
-scan_file = 'proxies.txt'
-cleaned_file = 'proxies_cleaned.txt'
-log_file = 'log.txt'
+scan_file = '../proxy/proxies.txt'
+cleaned_file = '../proxy/proxies_cleaned.txt'
+log_file = '../proxy/log.txt'
 
 
 def import_file():
@@ -45,8 +45,8 @@ def update_cleaned_file():
         with open(cleaned_file, 'w') as f:
             f.writelines(file)
             f.write(line)
-    except Exception as e:
-        print(e)
+    except Exception:
+        pass
 
 
 def check_captcha(htmlr):
@@ -70,7 +70,6 @@ def check_proxy(proxy):
                 fl.write(r.text)
             return False
     except Exception:
-        # print(e)
         return False
 
 
