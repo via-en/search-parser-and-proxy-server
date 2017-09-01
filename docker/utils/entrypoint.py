@@ -4,13 +4,17 @@ from time import sleep
 import subprocess
 import requests, os
 import json
-
+import sys
+sys.path.append("/usr/src/app/")
+sys.path.append("/usr/src/app/project")
+from proccess.main import SomeTaskManager, config 
+from crawler_base.run import main
 
 def run(app, *args):
     subprocess.check_call([app] + list(args))
 
 if __name__ =="__main__":
-
+    
     # command = "ip addr | grep -E 'eth0.*state UP' -A2 | tail -n 1 | awk '{print $2}' | cut -f1 -d '/'"  # the shell command
     # process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
     #
@@ -39,6 +43,8 @@ if __name__ =="__main__":
     # r = requests.put(url, data=json.dumps(message))
     # print(r.text)
     # run('uwsgi', '--ini', 'uwsgi.ini')
+
+    main(SomeTaskManager)
 
     while True:
         sleep(10)
