@@ -29,8 +29,17 @@ class SomeTaskManager(TaskManager):
   def _callback(self, task):
     logger.debug(task.crawlID)
 
-    payload = {'text': 'пластиковые окна'}
-    process = Process(main_config=main_config, searcher="https://yandex.ru/")
+    params = {'snTag': task.snTag, 'CrawlId': task.crawlID}
+    payload = {'text': task.search_q}
+
+    config = {'service_agent_conf_path': main_config.service_agent_conf_path,
+              'mongo': {'host_addr': task.mongoServerName,
+                        'db_name': task.mongoDataBaseName,
+                        'collection': task.mongoCollectionName
+                       }
+             }
+
+    process = Process(main_config=config, searcher="https://yandex.ru/", params=params)
     process.create_query(payload, pages=3)
 
     #  if self._task_factory is not None:
@@ -38,7 +47,7 @@ class SomeTaskManager(TaskManager):
     # make_sender(mongo_id)
 
 
-config = {
+conf = {
   'rabbit': {
     'username': main_config.main_proccess.rabbit.username,
     'password': main_config.main_proccess.rabbit.password,
@@ -69,5 +78,7 @@ config = {
   'dev_mode': True
 }
 
-tm = SomeTaskManager(config)
-tm.start_consuming()
+
+if __name__ == 'main':
+  tm = SomeTaskManager(conf)
+  tm.start_consuming()

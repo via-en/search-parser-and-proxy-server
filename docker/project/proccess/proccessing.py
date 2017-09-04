@@ -29,7 +29,7 @@ class Process:
     @property
     def sp(self):
         if not self._sp:
-            self._sp = Spider(placeFrom=self.searcher, main_config=main_config)
+            self._sp = Spider(placeFrom=self.searcher, main_config=self.main_config)
         return self._sp
 
     def create_query(self, payload, pages=3):
@@ -65,16 +65,16 @@ class Process:
 
     def create_records(self, payload):
 
-        connection_url = "{}/{}".format(main_config.post_proccess.yandex_task.mongo.host_url,
-                                        main_config.post_proccess.yandex_task.mongo.database)
+        connection_url = "{}/{}".format(self.main_config['mongo']['host_addr'],
+                                        self.main_config['mongo']['db_name'])
 
         init_connection(connection_url)
 
         for record in self.main_result:
             for index, d in enumerate(record['data'], 1):
                 item = Post()
-                item.Sntag = params['snTag']
-                item.CrawlId = [params['CrawlId']]
+                item.Sntag = self.params['snTag']
+                item.CrawlId = [self.params['CrawlId']]
                 item.LoadDate = datetime.datetime.now()
                 item.Title = d['snippet']
                 item.URL = d['href']
@@ -110,7 +110,13 @@ class Process:
 
 if __name__ == "__main__":
 
-    main_config = Config.setup_main_config(os.path.join(config_path, 'main_local.yml'))
+    conf = Config.setup_main_config(os.path.join(config_path, 'main_local.yml'))
+    main_config = {'service_agent_conf_path': conf.service_agent_conf_path,
+                                     'mongo': {'host_addr': conf.post_proccess.yandex_task.mongo.host_url,
+                                               'db_name': conf.post_proccess.yandex_task.mongo.database,
+                                               'collection': conf.post_proccess.yandex_task.mongo.collection
+                                               }
+                  }
 
     params = {'snTag': 'YA', 'CrawlId': "YA-1234"}
 

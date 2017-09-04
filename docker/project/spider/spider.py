@@ -19,17 +19,16 @@ class Spider(object):
     def __init__(self, placeFrom, main_config):
 
         self.placeFrom = placeFrom
-        self.manager = ConnectManager(path_user_agents=os.path.join(config_path, "userAgents.txt"), service_log=main_config.service_agent_conf_path)
+        self.manager = ConnectManager(path_user_agents=os.path.join(config_path, "userAgents.txt"), service_log=main_config['service_agent_conf_path'])
 
     def load(self, url):
         data = {'url': None, 'document': None}
 
-        driver = self.manager.driver()
+        driver = self.manager.get_driver()
         driver.get(self.placeFrom + url)
         data['url'] = url
         data['document'] = driver.page_source
-        driver.quit()
-
+        self.manager.erase(driver)
         return data
 
 
@@ -43,6 +42,14 @@ if __name__ == "__main__":
 
     listUrls = ["search/?{}".format(result)]
     print(listUrls)
-    main_config = Config.setup_main_config(os.path.join(config_path, 'main.yml'))
+    conf = Config.setup_main_config(os.path.join(config_path, 'main.yml'))
+
+    main_config = {'service_agent_conf_path': conf.service_agent_conf_path,
+                                     'mongo': {'host_addr': conf.post_proccess.yandex_task.mongo.host_url,
+                                               'db_name': conf.post_proccess.yandex_task.mongo.database,
+                                               'collection': conf.post_proccess.yandex_task.mongo.collection
+                                               }
+                  }
+
     sp = Spider(placeFrom=fromX, main_config=main_config)
     result = sp.load(listUrls)
