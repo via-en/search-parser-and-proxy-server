@@ -7,7 +7,7 @@ import json
 import sys
 sys.path.append("/usr/src/app/")
 sys.path.append("/usr/src/app/project")
-from proccess.main import SomeTaskManager, config 
+from proccess.main import SomeTaskManager
 from crawler_base.run import main
 
 def run(app, *args):
