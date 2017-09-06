@@ -11,7 +11,7 @@ from parse.parsing import Parse
 from spider.spider import Spider
 from mongo_structures.utils import init_connection
 from mongo_structures.models import Post
-
+import hashlib
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 config_path = os.path.join(CURRENT_DIR,'..', 'config')
@@ -78,7 +78,7 @@ class Process:
                 item.LoadDate = datetime.datetime.now()
                 item.Title = d['snippet']
                 item.URL = d['href']
-                item.ID = d['href']
+                item.ID = hashlib.md5((d['href'] + '_'+ d['snippet']).encode('utf-8')).hexdigest()
                 item.HashTags = [payload['text']]
                 item.spamWeight = index * (payload.get('p', 0) + 1)
                 item.PostType = 1

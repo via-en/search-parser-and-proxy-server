@@ -48,7 +48,13 @@ config = {
   },
   'proxy_url': '',
   'headers_url': '',
-  'dev_mode': True
+  'dev_mode': True,
+  'logging': {
+        'names': 'yandex',
+        'level': 0,
+        'file_path': '',
+        'elastic_url': ''
+  }
 }
 
 
