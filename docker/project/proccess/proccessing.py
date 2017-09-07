@@ -73,19 +73,20 @@ class Process:
 
         for record in self.main_result:
             for index, d in enumerate(record['data'], 1):
+                uniq_id = hashlib.md5((d['href'] + '_' + d['snippet']).encode('utf-8')).hexdigest()
                 item = Post()
                 item.Sntag = self.params['snTag']
                 item.CrawlId = [self.params['CrawlId']]
                 item.LoadDate = datetime.datetime.now()
                 item.Title = d['snippet']
                 item.URL = d['href']
-                item.ID = hashlib.md5((d['href'] + '_'+ d['snippet']).encode('utf-8')).hexdigest()
+                item.ID = uniq_id
                 item.HashTags = [payload['text']]
                 item.spamWeight = index * (payload.get('p', 0) + 1)
                 item.PostType = 1
                 item.JSONattachments = ""
 
-                if not Post.objects(ID=d['href']).count():
+                if not Post.objects(ID=uniq_id).count():
                     record_id = item.save()
                     self._logger.debug(record_id)
 
