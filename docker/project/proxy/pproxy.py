@@ -32,7 +32,7 @@ def import_file():
 
 
 def export_file():
-    with open(cleaned_file, 'wt') as file:
+    with open(cleaned_file, 'w') as file:
         for line in proxy_list_cleaned:
             file.write('%s\n' % line)
 
@@ -66,7 +66,7 @@ def check_proxy(proxy):
         if (r.status_code == 200) and (check_captcha(r.text)):
             return True
         else:
-            with open('ya' + proxy + '.html', 'wt') as fl:
+            with open('ya' + proxy + '.html', 'w') as fl:
                 fl.write(r.text)
             return False
     except Exception:
@@ -79,7 +79,7 @@ def check_proxies():
 
     import_file()
 
-    file = open(log_file, 'wt')
+    file = open(log_file, 'w')
 
     for proxy in proxy_list:
         if check_proxy(proxy):
@@ -94,14 +94,16 @@ def check_proxies():
 
 
 def give_proxy():
-    global cleaned_file
-    file = open(cleaned_file, 'r')
-    for i in range(0, sum(1 for line in open(cleaned_file, 'r'))):
-        proxy = file.readline().rstrip('\n')
-        if check_proxy(proxy):
-            update_cleaned_file()
-            return proxy
-    file.close()
+    try:
+        file = open(cleaned_file, 'w')
+        for i in range(0, sum(1 for line in open(cleaned_file, 'r'))):
+            proxy = file.readline().rstrip('\n')
+            if check_proxy(proxy):
+                update_cleaned_file()
+                return proxy
+        file.close()
+    except Exception:
+        return None
 
 
 def download_proxy(amount=100):
