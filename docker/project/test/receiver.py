@@ -7,6 +7,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
 
 from helper.config import Config
 
+sys.path.append("/usr/src/app/")
+sys.path.append("/usr/src/app/project")
+from proccess.main import SomeTaskManager
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 config_path = os.path.join(CURRENT_DIR,'../', 'config')
@@ -15,16 +18,6 @@ logger = logging.getLogger(__name__)
 
 
 main_config = Config.setup_main_config(os.path.join(config_path, 'main.yml'))
-
-
-class SomeTaskManager(TaskManager):
-  def __init__(self, config):
-    super().__init__(config)
-
-  def _callback(self, task):
-    logger.debug(task.crawlID)
-    # if self._task_factory is not None:
-    #   self._task_factory.build(_mongoIDsSerialized=str(mongo_id)).send()
 
 
 config = {
@@ -55,8 +48,16 @@ config = {
   },
   'proxy_url': '',
   'headers_url': '',
-  'dev_mode': True
+  'dev_mode': True,
+  'logging': {
+        'names': 'yandex',
+        'level': 0,
+        'file_path': '',
+        'elastic_url': ''
+  }
 }
 
-tm = SomeTaskManager(config)
-tm.start_consuming()
+
+if __name__ == '__main__':
+    tm = SomeTaskManager(config)
+    tm.start_consuming()

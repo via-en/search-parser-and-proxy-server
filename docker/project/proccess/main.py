@@ -4,7 +4,7 @@ import sys
 
 from crawler_base import TaskManager
 sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
-
+from awesome_logging import patch_record_factory
 
 from helper.config import Config
 from proccess.make_post_proccess import make_sender
@@ -28,17 +28,29 @@ class SomeTaskManager(TaskManager):
 
   def _callback(self, task):
     logger.debug(task.crawlID)
+    self._looger
+    params = {'snTag': task.snTag, 'CrawlId': task.crawlID}
+    payload = {'text': task.search_q}
 
-    payload = {'text': 'пластиковые окна'}
-    process = Process(main_config=main_config, searcher="https://yandex.ru/")
+    patch_record_factory(sn_tag=task.snTag, version='0.1.1', crawl_id=task.crawlID)
+    self._logger.info('start processing', extra={'title': 'Crowling'})
+    config = {'service_agent_conf_path': main_config.service_agent_conf_path,
+              'mongo': {'host_addr': task.mongoServerName,
+                        'db_name': task.mongoDataBaseName,
+                        'collection': task.mongoCollectionName
+                       }
+             }
+
+    process = Process(main_config=config, searcher="https://yandex.ru/", params=params)
+    self._logger.info('start processing', extra={'title': 'Crowling'})
     process.create_query(payload, pages=3)
-
+    self._logger.info('end processing', extra={'title': 'Crowling'})
     #  if self._task_factory is not None:
     #    self._task_factory.build(_mongoIDsSerialized=str(mongo_id)).send()
     # make_sender(mongo_id)
 
 
-config = {
+conf = {
   'rabbit': {
     'username': main_config.main_proccess.rabbit.username,
     'password': main_config.main_proccess.rabbit.password,
@@ -69,5 +81,7 @@ config = {
   'dev_mode': True
 }
 
-tm = SomeTaskManager(config)
-tm.start_consuming()
+
+if __name__ == 'main':
+  tm = SomeTaskManager(conf)
+  tm.start_consuming()

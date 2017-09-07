@@ -5,21 +5,22 @@ FROM ubuntu:16.04
  ADD utils/entrypoint.py /
  ENV CONDA_DIR /home/lenovo
  ENV MY_CONDA /home/lenovo/envs/test
+ #ENTRYPOINT [ “/bin/bash”, “-c” ]
  RUN wget --quiet https://repo.continuum.io/miniconda/Miniconda3-3.9.1-Linux-x86_64.sh && \
       /bin/bash /Miniconda3-3.9.1-Linux-x86_64.sh -b -p $CONDA_DIR && \
       rm Miniconda3-3.9.1-Linux-x86_64.sh && \
       $CONDA_DIR/bin/conda install --yes conda==4.3.24
  ENV PATH $CONDA_DIR/bin:$PATH
  #ENV PATH $CONDA_DIR/miniconda3/bin:$PATH
- RUN conda env create -f environment.yml
+ RUN conda env create -f /environment.yml
  RUN conda env list && conda update conda -y
- RUN /bin/bash -c "source activate $MY_CONDA"
- RUN pip install crawler_base --extra-index-url http://172.17.100.169:8081/simple/ --trusted-host 172.17.100.169
- RUN pip install mongo_structures --extra-index-url http://172.17.100.169:8081/simple/ --trusted-host 172.17.100.169
- RUN pip install rabbit-tasks --extra-index-url http://172.17.100.169:8081/simple/ --trusted-host 172.17.100.169
+ RUN ["/bin/bash", "-c",  "source activate $MY_CONDA"]
+ RUN ["/bin/bash", "-c", "source activate $MY_CONDA &&   pip install crawler_base --extra-index-url http://172.17.100.169:8081/simple/ --trusted-host 172.17.100.169"]
+ RUN ["/bin/bash", "-c", "source activate $MY_CONDA &&  pip install mongo_structures --extra-index-url http://172.17.100.169:8081/simple/ --trusted-host 172.17.100.169"]
+ RUN ["/bin/bash", "-c", "source activate $MY_CONDA &&  pip install rabbit-tasks --extra-index-url http://172.17.100.169:8081/simple/ --trusted-host 172.17.100.169"]
  RUN apt-get install -y uwsgi-plugin-python3
  RUN mkdir /var/log/uwsgi
- RUN pip install uwsgi
+ RUN ["/bin/bash", "-c", "source activate $MY_CONDA &&  pip install uwsgi"]
  RUN chmod 777 /entrypoint.py
  WORKDIR /usr/src/app
- CMD python /entrypoint.py
+ CMD ["/bin/bash", "-c", "source activate $MY_CONDA  &&  python /entrypoint.py"]

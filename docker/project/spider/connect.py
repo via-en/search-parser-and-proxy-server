@@ -28,7 +28,7 @@ class ConnectManager:
     def erase(self, driver):
         self.freeDrivers.append(self.drivers.index(driver))
 
-    def eraseAll(self):
+    def erase_all(self):
         self.freeDrivers = range(self.count)
 
     def create(self):
@@ -64,7 +64,7 @@ class ConnectManager:
 
         return driver
 
-    def driver(self):
+    def get_driver(self):
 
         if self.freeDrivers == []:
             self.drivers.append(self.create())

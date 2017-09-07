@@ -2,8 +2,8 @@
 service_agent_conf_path: "/tmp"
 main_proccess:
  mongo:
-  host: 172.17.100.168
-  port: 20707
+  host: 172.17.100.169
+  port: 28015
   database: YandexData
  rabbit:
   host: 172.17.100.169:5672
