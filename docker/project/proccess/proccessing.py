@@ -15,8 +15,8 @@ import hashlib
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 config_path = os.path.join(CURRENT_DIR,'..', 'config')
-logging.config.fileConfig(os.path.join(config_path, 'logging.conf'))
-logger = logging.getLogger(__name__)
+#logging.config.fileConfig(os.path.join(config_path, 'logging.conf'))
+#logger = logging.getLogger(__name__)
 
 class Process:
     def __init__(self, main_config, searcher, params):
@@ -25,6 +25,7 @@ class Process:
         self._sp = None
         self.main_result = []
         self.params = params
+        self._logger = logging.getLogger('crawler')
 
     @property
     def sp(self):
@@ -43,25 +44,25 @@ class Process:
                             payload.update({'p': page_next})
                             self.get_query(payload)
                         else:
-                            logger.debug(self.main_result)
+                            self._logger.debug(self.main_result)
                             break
                     except Exception as err:
-                        logger.debug(err)
-                        logger.debug(self.main_result)
+                        self._logger.debug(err)
+                        self._logger.debug(self.main_result)
                         break
 
                 else:
                     try:
                         self.get_query(payload)
                     except Exception as err:
-                        logger.debug(err)
-                        logger.debug(self.main_result)
+                        self._logger.debug(err)
+                        self._logger.debug(self.main_result)
                         break
 
         try:
             self.create_records(payload)
         except Exception as err:
-            logger.debug(err)
+            self._logger.debug(err)
 
     def create_records(self, payload):
 
@@ -86,7 +87,7 @@ class Process:
 
                 if not Post.objects(ID=d['href']).count():
                     record_id = item.save()
-                    logger.debug(record_id)
+                    self._logger.debug(record_id)
 
     def get_query(self, payload):
 
@@ -96,8 +97,8 @@ class Process:
         try:
             pages_result = self.sp.load(url)
         except Exception as err:
-            logger.debug(err)
-            raise Exception
+            self._logger.debug(err)
+            raise err
 
         # load firts page from parser
         # pages_result={'document', 'url'}

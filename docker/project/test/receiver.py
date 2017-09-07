@@ -32,7 +32,7 @@ config = {
     'max_task_respawn': 3
   },
   'db': {
-    'DB_PORT': '20707',
+    'DB_PORT': '28015',
     'DB_TABLE_NAMES': {
         'errors': 'errors',
         'inputData': 'inputData',
@@ -40,7 +40,7 @@ config = {
         'users': 'users'
     },
     'DB_NAME': 'YandexData',
-    'DB_HOST': '172.17.100.168'
+    'DB_HOST': '172.17.100.169'
   },
   'redis': {
     'REDIS_URL': 'redis://:@172.17.100.169:6379/0',

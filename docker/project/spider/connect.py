@@ -10,7 +10,7 @@ import proxy.pproxy
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 config_path = os.path.join(CURRENT_DIR, '..', 'config')
 logging.config.fileConfig(os.path.join(config_path, 'logging.conf'))
-logger = logging.getLogger(__name__)
+#logger = logging.getLogger(__name__)
 
 
 class ConnectManager:
@@ -21,7 +21,7 @@ class ConnectManager:
         self.headers = []
         self.service_log = service_log
         fileAgents = open(path_user_agents)
-
+        self._logger = logging.getLogger('crawler')
         for agent in fileAgents:
             self.headers.append(agent)
 
@@ -41,6 +41,7 @@ class ConnectManager:
                 '--proxy-auth={}'.format(prx[0]),
             ]
         except AttributeError:
+            self._logger.debug("error while getting proxy")
             service_args = [
                 '--proxy={}'.format(prx),
                 '--proxy-type=https',
