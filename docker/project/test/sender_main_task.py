@@ -4,7 +4,7 @@ rabbit_config = {
   'username': 'test',
   'password': 'test',
   'host': '172.17.100.169:5672',
-  'queue': 'testtesttest',
+  'queue': 'testtesttest2',
   'autodelete': False,
   'durable': True,
   'msecsttl': 0,

@@ -25,7 +25,7 @@ config = {
     'username': 'test',
     'password': 'test',
     'host': '172.17.100.169:5672',
-    'queue': 'testtesttest',
+    'queue': 'testtesttest2',
     'autodelete': False,
     'durable': True,
     'msecsttl': 0,
@@ -52,7 +52,7 @@ config = {
   'logging': {
         'names': 'yandex',
         'level': 0,
-        'file_path': '',
+        'file_path': '/usr/src/app/project/logs/test.log',
         'elastic_url': ''
   }
 }
