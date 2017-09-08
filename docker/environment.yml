@@ -17,6 +17,7 @@ dependencies:
 - pip:
   - asn1crypto==0.22.0
   - beautifulsoup4==4.6.0
+  - cssselect==1.0.1
   - bs4==0.0.1
   - certifi==2017.7.27.1
   - cffi==1.10.0
@@ -25,6 +26,7 @@ dependencies:
   - google-api-python-client==1.6.2
   - httplib2==0.10.3
   - idna==2.6
+  - pyvirtualdisplay==0.2.1
   - lockfile==0.12.2
   - lxml==3.8.0
   - mongoengine==0.13.0

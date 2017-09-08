@@ -10,6 +10,8 @@ import proxy.pproxy
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 config_path = os.path.join(CURRENT_DIR, '..', 'config')
 logging.config.fileConfig(os.path.join(config_path, 'logging.conf'))
+from pyvirtualdisplay import Display
+
 #logger = logging.getLogger(__name__)
 
 
@@ -24,6 +26,7 @@ class ConnectManager:
         self._logger = logging.getLogger('crawler')
         for agent in fileAgents:
             self.headers.append(agent)
+        self.display = Display(visible=0, size=(1920, 1080)).start()
 
     def erase(self, driver):
         self.freeDrivers.append(self.drivers.index(driver))

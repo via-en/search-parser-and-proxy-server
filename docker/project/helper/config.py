@@ -15,7 +15,7 @@ class Config:
     @staticmethod
     def setup_main_config(path):
         if os.path.exists(path):
-            with open(path, 'rt') as f:
+            with open(path, 'rt', encoding="utf-8") as f:
                 config_variable = yaml.safe_load(f.read())
                 return Config(config_variable)
         else:

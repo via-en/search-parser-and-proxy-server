@@ -1,5 +1,5 @@
 FROM ubuntu:16.04
- RUN apt-get update -y && apt-get install -y wget nano curl ca-certificates build-essential bzip2 libsm6 && apt-get clean
+ RUN apt-get update -y && apt-get install -y wget nano curl ca-certificates build-essential bzip2 libsm6 phantomjs xvfb && apt-get clean
  RUN mkdir /usr/src/log
  ADD environment.yml /
  ADD utils/entrypoint.py /

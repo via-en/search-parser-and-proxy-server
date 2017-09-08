@@ -2,6 +2,7 @@ import requests
 import os
 import lxml.html as html
 import time
+import logging
 
 headers = {
     'User-Agent': 'Lynx/2.8.9dev.8 libwww-FM/2.14 SSL-MM/1.4.1 GNUTLS/3.4.9',
@@ -61,6 +62,7 @@ def check_proxy(proxy):
     proxy_dict = {
         "https": "https://" + proxy,
     }
+    logger = logging.getLogger('crawler')
     try:
         r = requests.get(url, headers=headers, proxies=proxy_dict, timeout=10)
         if (r.status_code == 200) and (check_captcha(r.text)):
@@ -69,7 +71,8 @@ def check_proxy(proxy):
             with open('ya' + proxy + '.html', 'w') as fl:
                 fl.write(r.text)
             return False
-    except Exception:
+    except Exception as err:
+        logger.debug(err)
         return False
 
 
@@ -94,16 +97,18 @@ def check_proxies():
 
 
 def give_proxy():
+    logger = logging.getLogger('crawler')
     try:
-        file = open(cleaned_file, 'w')
+        file = open(cleaned_file, 'r')
         for i in range(0, sum(1 for line in open(cleaned_file, 'r'))):
             proxy = file.readline().rstrip('\n')
             if check_proxy(proxy):
                 update_cleaned_file()
                 return proxy
         file.close()
-    except Exception:
-        return None
+    except Exception as err:
+        logger.debug(err)
+    return None
 
 
 def download_proxy(amount=100):
