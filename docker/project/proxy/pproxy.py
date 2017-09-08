@@ -14,7 +14,7 @@ headers = {
     'Host': 'yandex.ru'
     }
 
-url = 'https://yandex.ru/search/?text=qwerty'
+url = 'https://yandex.ru/search/?text=qwerty&lr=213'
 download_url = 'http://api.foxtools.ru/v2/Proxy.txt' \
                '?cp=UTF-8&lang=Auto&type=HTTPS&available=Yes&free=Yes&uptime=5&limit='
 

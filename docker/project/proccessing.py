@@ -80,7 +80,7 @@ class Process:
 
         url_format = urlencode(payload, quote_via=quote_plus)
 
-        url = "search/?{}".format(url_format)
+        url = "search/?{0}{1}".format(url_format, "&lr=213") #toDo update 213 to real region
         try:
             pages_result = self.sp.load(url)
         except Exception as err:
