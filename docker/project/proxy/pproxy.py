@@ -51,9 +51,8 @@ def update_cleaned_file():
 
 
 def check_captcha(htmlr):
-
     page = html.fromstring(htmlr)
-    if page.cssselect('.form__captcha'):
+    if page.cssselect('.form__captcha') or htmlr[0] == '{':
         return False
     return True
 
@@ -68,8 +67,6 @@ def check_proxy(proxy):
         if (r.status_code == 200) and (check_captcha(r.text)):
             return True
         else:
-            with open('ya' + proxy + '.html', 'w') as fl:
-                fl.write(r.text)
             return False
     except Exception as err:
         logger.debug(err)
