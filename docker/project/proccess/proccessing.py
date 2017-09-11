@@ -15,7 +15,7 @@ import hashlib
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 config_path = os.path.join(CURRENT_DIR,'..', 'config')
-#logging.config.fileConfig(os.path.join(config_path, 'logging.conf'))
+logging.config.fileConfig(os.path.join(config_path, 'logging.conf'))
 #logger = logging.getLogger(__name__)
 
 class Process:
@@ -55,6 +55,7 @@ class Process:
                     try:
                         self.get_query(payload)
                     except Exception as err:
+                        self._logger.debug(payload)
                         self._logger.debug(err)
                         self._logger.debug(self.main_result)
                         break
@@ -72,6 +73,7 @@ class Process:
         init_connection(connection_url)
 
         for record in self.main_result:
+            self._logger.debug(record['data'])
             for index, d in enumerate(record['data'], 1):
                 uniq_id = hashlib.md5((d['href'] + '_' + d['snippet']).encode('utf-8')).hexdigest()
                 item = Post()
@@ -86,6 +88,8 @@ class Process:
                 item.PostType = 1
                 item.JSONattachments = ""
 
+                self._logger.debug(item.__dict__)
+
                 if not Post.objects(ID=uniq_id).count():
                     record_id = item.save()
                     self._logger.debug(record_id)
@@ -95,8 +99,10 @@ class Process:
         url_format = urlencode(payload, quote_via=quote_plus)
 
         url = "search/?{}".format(url_format)
+        self._logger.debug(url)
         try:
             pages_result = self.sp.load(url)
+            self._logger.debug(pages_result)
         except Exception as err:
             self._logger.debug(err)
             raise err

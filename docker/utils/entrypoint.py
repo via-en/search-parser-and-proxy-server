@@ -44,7 +44,7 @@ if __name__ =="__main__":
     # print(r.text)
     # run('uwsgi', '--ini', 'uwsgi.ini')
 
-    main(SomeTaskManager)
+    #main(SomeTaskManager)
 
     while True:
         sleep(10)

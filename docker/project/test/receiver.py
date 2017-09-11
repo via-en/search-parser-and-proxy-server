@@ -24,7 +24,7 @@ config = {
   'rabbit': {
     'username': 'test',
     'password': 'test',
-    'host': '172.17.100.169:5672',
+    'host': '79.135.230.130:20672',
     'queue': 'testtesttest2',
     'autodelete': False,
     'durable': True,
@@ -32,7 +32,7 @@ config = {
     'max_task_respawn': 3
   },
   'db': {
-    'DB_PORT': '28015',
+    'DB_PORT': '20707',
     'DB_TABLE_NAMES': {
         'errors': 'errors',
         'inputData': 'inputData',
@@ -40,10 +40,10 @@ config = {
         'users': 'users'
     },
     'DB_NAME': 'YandexData',
-    'DB_HOST': '172.17.100.169'
+    'DB_HOST': '79.135.230.130'
   },
   'redis': {
-    'REDIS_URL': 'redis://:@172.17.100.169:6379/0',
+    'REDIS_URL': 'redis://:@79.135.230.130:20379/0',
     'REDIS_BRANCH': 'TestTest'
   },
   'proxy_url': '',

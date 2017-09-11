@@ -7,7 +7,7 @@ from lxml.html.clean import Cleaner
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 logging.config.fileConfig(os.path.join(os.path.join(CURRENT_DIR,'..','config'), 'logging.conf'))
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)
 
 from lxml.html.soupparser import fromstring
 sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
@@ -22,8 +22,11 @@ class Parse:
         self.config = Config.setup_main_config(os.path.join(config_path, 'yandex.yml'))
         self.result = []
         self._cleaner = None
+        self._logger = logging.getLogger('crawler')
 
     def make(self):
+        self._logger.debug(self.buffer)
+
         tree = fromstring(self.buffer, features="html.parser")
         matches = tree.xpath(self.config.ul)
         ul = matches[0]
@@ -45,6 +48,7 @@ class Parse:
         self.result = data
 
     def cleaner_li(self):
+
         cleaner = Cleaner()
         cleaner.javascript = True
         cleaner.style = True
@@ -61,4 +65,4 @@ if __name__ == "__main__":
     buffer = open("result0.html", "r", encoding='UTF-8')
     parse = Parse(buffer, config_path=os.path.join(CURRENT_DIR,'..','config'))
     parse.make()
-    logger.debug(parse.result)
+    # logger.debug(parse.result)

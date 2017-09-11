@@ -15,7 +15,7 @@ from mongo_structures.models import ItemDocument
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 config_path = os.path.join(CURRENT_DIR,'..', 'config')
-logging.config.fileConfig(os.path.join(config_path, 'logging.conf'))
+# logging.config.fileConfig(os.path.join(config_path, 'logging.conf'))
 #logger = logging.getLogger(__name__)
 
 
@@ -27,7 +27,7 @@ class SomeTaskManager(TaskManager):
     super().__init__(config)
 
   def _callback(self, task):
-    logger.debug(task.crawlID)
+    self._logger.debug(task.crawlID)
 
     params = {'snTag': task.snTag, 'CrawlId': task.crawlID}
     payload = {'text': task.search_q}
