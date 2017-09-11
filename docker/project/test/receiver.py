@@ -13,8 +13,8 @@ from proccess.main import SomeTaskManager
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 config_path = os.path.join(CURRENT_DIR,'../', 'config')
-logging.config.fileConfig(os.path.join(config_path, 'logging.conf'))
-logger = logging.getLogger(__name__)
+# logging.config.fileConfig(os.path.join(config_path, 'logging.conf'))
+#logger = logging.getLogger(__name__)
 
 
 main_config = Config.setup_main_config(os.path.join(config_path, 'main.yml'))

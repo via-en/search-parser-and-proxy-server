@@ -92,7 +92,7 @@ class Process:
 
                 if not Post.objects(ID=uniq_id).count():
                     record_id = item.save()
-                    self._logger.debug(record_id)
+                    #self._logger.debug(record_id)
 
     def get_query(self, payload):
 
