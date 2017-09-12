@@ -20,20 +20,21 @@ download_url = 'http://api.foxtools.ru/v2/Proxy.txt' \
 
 proxy_list = []
 proxy_list_cleaned = []
-scan_dir = ''
-scan_file = '../proxy/proxies.txt'
-cleaned_file = '../proxy/proxies_cleaned.txt'
-log_file = '../proxy/log.txt'
+scan_file = 'proxies.txt'
+cleaned_file = 'proxies_cleaned.txt'
+log_file = 'log.txt'
+
+CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 
 
 def import_file():
     global proxy_list
 
-    proxy_list = [line.rstrip('\n') for line in open(os.path.join(scan_dir, scan_file), 'r')]
+    proxy_list = [line.rstrip('\n') for line in open(os.path.join(CURRENT_DIR, scan_file), 'r')]
 
 
 def export_file():
-    with open(cleaned_file, 'w') as file:
+    with open(os.path.join(CURRENT_DIR, cleaned_file), 'w') as file:
         for line in proxy_list_cleaned:
             file.write('%s\n' % line)
 
@@ -41,9 +42,9 @@ def export_file():
 def update_cleaned_file():
     global cleaned_file
     try:
-        file = open(cleaned_file).readlines()
+        file = open(os.path.join(CURRENT_DIR, cleaned_file)).readlines()
         line = file.pop(0)
-        with open(cleaned_file, 'w') as f:
+        with open(os.path.join(CURRENT_DIR, cleaned_file), 'w') as f:
             f.writelines(file)
             f.write(line)
     except Exception:
@@ -79,7 +80,7 @@ def check_proxies():
 
     import_file()
 
-    file = open(log_file, 'w')
+    file = open(os.path.join(CURRENT_DIR,log_file), 'w')
 
     for proxy in proxy_list:
         if check_proxy(proxy):
@@ -96,8 +97,8 @@ def check_proxies():
 def give_proxy():
     logger = logging.getLogger('crawler')
     try:
-        file = open(cleaned_file, 'r')
-        for i in range(0, sum(1 for line in open(cleaned_file, 'r'))):
+        file = open(os.path.join(CURRENT_DIR, cleaned_file), 'r')
+        for i in range(0, sum(1 for line in open(os.path.join(CURRENT_DIR, cleaned_file), 'r'))):
             proxy = file.readline().rstrip('\n')
             if check_proxy(proxy):
                 update_cleaned_file()
@@ -110,5 +111,5 @@ def give_proxy():
 
 def download_proxy(amount=100):
     r = requests.get(download_url + str(amount), headers=headers, timeout=10)
-    with open(scan_file, 'w') as f:
+    with open(os.path.join(CURRENT_DIR, scan_file), 'w') as f:
         f.writelines(r.text)

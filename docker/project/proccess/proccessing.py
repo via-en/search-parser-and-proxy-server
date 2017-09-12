@@ -44,11 +44,11 @@ class Process:
                             payload.update({'p': page_next})
                             self.get_query(payload)
                         else:
-                            self._logger.debug(self.main_result)
+                            #self._logger.debug(self.main_result)
                             break
                     except Exception as err:
                         self._logger.debug(err)
-                        self._logger.debug(self.main_result)
+                        #self._logger.debug(self.main_result)
                         break
 
                 else:
@@ -57,7 +57,7 @@ class Process:
                     except Exception as err:
                         self._logger.debug(payload)
                         self._logger.debug(err)
-                        self._logger.debug(self.main_result)
+                        #self._logger.debug(self.main_result)
                         break
 
         try:
@@ -73,7 +73,7 @@ class Process:
         init_connection(connection_url)
 
         for record in self.main_result:
-            self._logger.debug(record['data'])
+            #self._logger.debug(record['data'])
             for index, d in enumerate(record['data'], 1):
                 uniq_id = hashlib.md5((d['href'] + '_' + d['snippet']).encode('utf-8')).hexdigest()
                 item = Post()
@@ -102,7 +102,7 @@ class Process:
         self._logger.debug(url)
         try:
             pages_result = self.sp.load(url)
-            self._logger.debug(pages_result)
+            #self._logger.debug(pages_result)
         except Exception as err:
             self._logger.debug(err)
             raise err

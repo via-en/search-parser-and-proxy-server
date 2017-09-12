@@ -43,7 +43,7 @@ class SomeTaskManager(TaskManager):
 
     process = Process(main_config=config, searcher="https://yandex.ru/", params=params)
     self._logger.info('start processing', extra={'title': 'Crowling'})
-    process.create_query(payload, pages=3)
+    process.create_query(payload, pages=task.size)
     self._logger.info('end processing', extra={'title': 'Crowling'})
     #  if self._task_factory is not None:
     #    self._task_factory.build(_mongoIDsSerialized=str(mongo_id)).send()

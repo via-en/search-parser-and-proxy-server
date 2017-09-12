@@ -25,7 +25,7 @@ class Parse:
         self._logger = logging.getLogger('crawler')
 
     def make(self):
-        self._logger.debug(self.buffer)
+        #self._logger.debug(self.buffer)
 
         tree = fromstring(self.buffer, features="html.parser")
         matches = tree.xpath(self.config.ul)
