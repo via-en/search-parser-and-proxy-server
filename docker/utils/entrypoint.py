@@ -45,7 +45,6 @@ if __name__ =="__main__":
     # print(message)
     # r = requests.put(url, data=json.dumps(message))
     # print(r.text)
-    # run('uwsgi', '--ini', 'uwsgi.ini')
 
     main(SomeTaskManager)
 

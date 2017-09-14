@@ -67,7 +67,7 @@ class Process:
 
     def create_records(self, payload):
 
-        connection_url = "{}/{}".format(self.main_config['mongo']['host_addr'],
+        connection_url = "{}/{}".format(self.main_config['mongo']['host_addr'].rstrip("/"),
                                         self.main_config['mongo']['db_name'])
 
         init_connection(connection_url)
