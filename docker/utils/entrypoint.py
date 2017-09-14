@@ -10,9 +10,6 @@ sys.path.append("/usr/src/app/project")
 from proccess.main import SomeTaskManager
 from crawler_base.run import main
 
-def run(app, *args):
-    subprocess.check_call([app] + list(args))
-
 if __name__ =="__main__":
     
     # command = "ip addr | grep -E 'eth0.*state UP' -A2 | tail -n 1 | awk '{print $2}' | cut -f1 -d '/'"  # the shell command
@@ -42,7 +39,6 @@ if __name__ =="__main__":
     # print(message)
     # r = requests.put(url, data=json.dumps(message))
     # print(r.text)
-    # run('uwsgi', '--ini', 'uwsgi.ini')
 
     main(SomeTaskManager)
 
