@@ -40,7 +40,7 @@ class Process:
                 if self.main_result:
                     try:
                         page_next = self.main_result[-1]['pages']['pager']['nextPage']
-                        if page_next < pages:
+                        if not (type(page_next) == bool and page_next is False) and page_next < pages:
                             payload.update({'p': page_next})
                             self.get_query(payload)
                         else:
@@ -92,7 +92,7 @@ class Process:
 
                 if not Post.objects(ID=uniq_id).count():
                     record_id = item.save()
-                    #self._logger.debug(record_id)
+                    self._logger.debug("record saved")
 
     def get_query(self, payload):
 
