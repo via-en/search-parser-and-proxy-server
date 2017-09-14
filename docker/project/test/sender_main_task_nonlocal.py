@@ -27,8 +27,8 @@ task = {
   'crawlID': 'YA-1234',
   'taskID': '599d84c4f89bca2afc8a2e80',
   'count': 10, #кол-во страниц для поиска
-  'search_q': 'пластиковые окна site:avito.ru',
-  'size': 2, #глубина вложения для скачивания url
+  'search_q': 'Are you ready?',
+  'size': 1, #глубина вложения для скачивания url
   'proxy': 1, #типа да
   'region': ''
 }

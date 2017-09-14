@@ -2,6 +2,12 @@
 # -*- coding: utf-8 -*-
 from time import sleep
 import subprocess
+
+#def run(app, *args):
+#    subprocess.check_call([app] + list(args))
+#
+#run('source', 'activate', 'test')
+
 import requests, os
 import json
 import sys
@@ -9,9 +15,6 @@ sys.path.append("/usr/src/app/")
 sys.path.append("/usr/src/app/project")
 from proccess.main import SomeTaskManager
 from crawler_base.run import main
-
-def run(app, *args):
-    subprocess.check_call([app] + list(args))
 
 if __name__ =="__main__":
     
