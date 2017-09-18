@@ -1,5 +1,3 @@
-image: continuumio/miniconda3:latest
-
 before_script:
   - conda env create -f docker/environment.yml
   - source activate test
