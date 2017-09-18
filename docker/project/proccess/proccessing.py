@@ -80,7 +80,8 @@ class Process:
                 item.Sntag = self.params['snTag']
                 item.CrawlId = [self.params['CrawlId']]
                 item.LoadDate = datetime.datetime.now()
-                item.Title = d['snippet']
+                item.Title = d['title']
+                item.Text = d['snippet']
                 item.URL = d['href']
                 item.ID = uniq_id
                 item.HashTags = [payload['text']]

@@ -1,0 +1,10 @@
+image: continuumio/miniconda3:latest
+
+before_script:
+  - conda env create -f docker/environment.yml
+  - source activate test
+
+tests:
+  stage: test
+  script:
+    - python -m unittest docker/project/test/main_tests.py  -v
