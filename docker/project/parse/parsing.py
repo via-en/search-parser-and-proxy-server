@@ -7,7 +7,6 @@ from lxml.html.clean import Cleaner
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 logging.config.fileConfig(os.path.join(os.path.join(CURRENT_DIR,'..','config'), 'logging.conf'))
-# logger = logging.getLogger(__name__)
 
 from lxml.html.soupparser import fromstring
 sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
@@ -25,8 +24,6 @@ class Parse:
         self._logger = logging.getLogger('crawler')
 
     def make(self):
-        #self._logger.debug(self.buffer)
-
         tree = fromstring(self.buffer, features="html.parser")
         matches = tree.xpath(self.config.ul)
         ul = matches[0]
@@ -42,6 +39,8 @@ class Parse:
             tree_temp = fromstring(tmp['snippet'], features="html.parser")
             href = tree_temp.xpath(self.config.href)
             tmp['href'] = href[0]
+            title = tree_temp.xpath(self.config.title)
+            tmp['title'] = title[0]
 
             data['data'].append(tmp)
 
@@ -61,8 +60,4 @@ class Parse:
 
 
 if __name__ == "__main__":
-
-    buffer = open("result0.html", "r", encoding='UTF-8')
-    parse = Parse(buffer, config_path=os.path.join(CURRENT_DIR,'..','config'))
-    parse.make()
-    # logger.debug(parse.result)
+    pass
