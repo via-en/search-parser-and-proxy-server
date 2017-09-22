@@ -78,6 +78,7 @@ class Process:
                 uniq_id = hashlib.md5((d['href'] + '_' + d['snippet']).encode('utf-8')).hexdigest()
                 item = Post()
                 item.Sntag = self.params['snTag']
+                item.WorkflowId = self.params['workflowID']
                 item.CrawlId = [self.params['CrawlId']]
                 item.LoadDate = datetime.datetime.now()
                 item.Title = d['title']
@@ -87,7 +88,6 @@ class Process:
                 item.HashTags = [payload['text']]
                 item.spamWeight = index * (payload.get('p', 0) + 1)
                 item.PostType = 1
-                item.JSONattachments = ""
 
                 self._logger.debug(item.__dict__)
 
