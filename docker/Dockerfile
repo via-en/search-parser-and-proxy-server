@@ -24,4 +24,5 @@ FROM ubuntu:16.04
  RUN ["/bin/bash", "-c", "source activate $MY_CONDA &&  pip install uwsgi"]
  RUN chmod 777 /entrypoint.py
  WORKDIR /usr/src/app
- CMD ["/bin/bash", "-c", "source activate $MY_CONDA  &&  python /entrypoint.py --dev_mode"]
+ #CMD ["/bin/bash", "-c", "source activate $MY_CONDA  &&  python /entrypoint.py --dev_mode"]
+ CMD ["/bin/bash", "-c", "source activate $MY_CONDA  &&  python /entrypoint.py"]
