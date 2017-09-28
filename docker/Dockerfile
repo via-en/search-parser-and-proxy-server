@@ -16,9 +16,9 @@ FROM ubuntu:16.04
  RUN conda env create -f /environment.yml
  RUN conda env list && conda update conda -y
  RUN ["/bin/bash", "-c",  "source activate $MY_CONDA"]
- RUN ["/bin/bash", "-c", "source activate $MY_CONDA &&  pip install crawler_base --extra-index-url http://79.135.230.130:20081/simple/ --trusted-host 79.135.230.130"]
- RUN ["/bin/bash", "-c", "source activate $MY_CONDA &&  pip install mongo_structures --extra-index-url http://79.135.230.130:20081/simple/ --trusted-host 79.135.230.130"]
- RUN ["/bin/bash", "-c", "source activate $MY_CONDA &&  pip install rabbit-tasks --extra-index-url http://79.135.230.130:20081/simple/ --trusted-host 79.135.230.130"]
+ RUN ["/bin/bash", "-c", "source activate $MY_CONDA &&  pip install crawler_base --extra-index-url http://172.17.100.169:20081/simple/ --trusted-host 172.17.100.169"]
+ RUN ["/bin/bash", "-c", "source activate $MY_CONDA &&  pip install mongo_structures --extra-index-url http://172.17.100.169:20081/simple/ --trusted-host 172.17.100.169"]
+ RUN ["/bin/bash", "-c", "source activate $MY_CONDA &&  pip install rabbit-tasks --extra-index-url http://172.17.100.169:20081/simple/ --trusted-host 172.17.100.169"]
  RUN apt-get install -y uwsgi-plugin-python3
  RUN mkdir /var/log/uwsgi
  RUN ["/bin/bash", "-c", "source activate $MY_CONDA &&  pip install uwsgi"]
