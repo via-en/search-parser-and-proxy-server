@@ -11,11 +11,8 @@ import proxy.pproxy
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 config_path = os.path.join(CURRENT_DIR, '..', 'config')
-logging.config.fileConfig(os.path.join(config_path, 'logging.conf'))
 
 from pyvirtualdisplay import Display
-
-#logger = logging.getLogger(__name__)
 
 
 class ConnectManager:
@@ -38,29 +35,24 @@ class ConnectManager:
         self.freeDrivers = range(self.count)
 
     def create(self):
-        try:
-            prx = proxy.pproxy.give_proxy().partition('@')
-        except Exception as err:
-            self._logger.debug(err)
-            raise err
 
-        try:
-            service_args = [
-                '--proxy={}'.format(prx[2]),
-                '--proxy-type=https',
-                '--proxy-auth={}'.format(prx[0]),
-            ]
-        except AttributeError:
-            self._logger.debug("error while getting proxy")
-            service_args = [
-                '--proxy={}'.format(prx),
-                '--proxy-type=https',
-            ]
+        prx = proxy.pproxy.give_proxy()
+
+        if prx is None:
+            self._logger.error("Can't create proxy")
+            return None
+
+        prx = prx.split('@')
+        service_args = [
+            '--proxy={}'.format(prx[-1]),
+            '--proxy-type=https',
+        ]
+        if len(prx) == 2:
+            service_args.append('--proxy-auth={}'.format(prx[0]))
+
 
         dcap = dict(DesiredCapabilities.PHANTOMJS)
         dcap["phantomjs.page.settings.userAgent"] = self.headers[randint(0, len(self.headers) - 1)]
-
-        #dcap["phantomjs.page.settings.userAgent"] = 'Lynx/2.8.9dev.8 libwww-FM/2.14 SSL-MM/1.4.1 GNUTLS/3.4.9'
         #
         dcap['phantomjs.page.customHeaders.Accept'] = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
         #dcap['phantomjs.page.customHeaders.Accept-Encoding'] = 'gzip, deflate, br'
@@ -82,8 +74,14 @@ class ConnectManager:
 
     def get_driver(self):
 
-        if self.freeDrivers == []:
-            self.drivers.append(self.create())
+        if not self.freeDrivers:
+
+            proxy_created = self.create()
+
+            if not proxy_created:
+                return None
+
+            self.drivers.append(proxy_created)
             self.count += 1
 
             return self.drivers[-1]
@@ -95,11 +93,12 @@ class ConnectManager:
         num = self.drivers.index(driver)
 
         self.drivers[num].close()
-        self.drivers[num] = self.create()
+
+        proxy_created = self.create()
+
+        if not proxy_created:
+            return False
+
+        self.drivers[num] = proxy_created
 
         return self.drivers[num]
-
-
-if __name__ == "__main__":
-
-    manager = ConnectManager(path_user_agents=os.path.join(config_path, "userAgents.txt"))

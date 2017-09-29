@@ -1,15 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 from time import sleep
-import subprocess
 
-#def run(app, *args):
-#    subprocess.check_call([app] + list(args))
-#
-#run('source', 'activate', 'test')
-
-import requests, os
-import json
 import sys
 sys.path.append("/usr/src/app/")
 sys.path.append("/usr/src/app/project")
@@ -17,34 +9,6 @@ from proccess.main import SomeTaskManager
 from crawler_base.run import main
 
 if __name__ =="__main__":
-    
-    # command = "ip addr | grep -E 'eth0.*state UP' -A2 | tail -n 1 | awk '{print $2}' | cut -f1 -d '/'"  # the shell command
-    # process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
-    #
-    # output = process.communicate()
-    # IP = output[0].decode("utf-8").strip("\n")
-    # #test
-    # IP = 'localhost'
-    # NAME = "flask-service"
-    # HOST = os.getenv('CONSUL_HOST')
-    # PORT = 5000
-    #
-    # message = dict()
-    # message["Name"] = NAME
-    # message["address"] = IP
-    # message["port"] = PORT
-    #
-    # temp = dict()
-    # temp["http"] = "http://{}:{}".format(IP, PORT)
-    # temp["interval"] = "5s"
-    #
-    # message["Check"] = temp.copy()
-    #
-    # url = 'http://{}:8500/v1/agent/service/register'.format(HOST)
-    # print(url)
-    # print(message)
-    # r = requests.put(url, data=json.dumps(message))
-    # print(r.text)
 
     main(SomeTaskManager)
 

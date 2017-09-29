@@ -1,12 +1,8 @@
 import json
-import logging.config
 import os, sys
-
+import logging.config
 from lxml import etree
-from lxml.html.clean import Cleaner
-
-CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
-logging.config.fileConfig(os.path.join(os.path.join(CURRENT_DIR,'..','config'), 'logging.conf'))
+from lxml.html.clean import Cleaner, clean_html
 
 from lxml.html.soupparser import fromstring
 sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
@@ -28,17 +24,17 @@ class Parse:
         matches = tree.xpath(self.config.ul)
         ul = matches[0]
         lis = ul.xpath(self.config.li)
-        data = {}
-        data['pages'] = json.loads(tree.xpath(self.config.pages)[0])
-        data['data'] = []
+        data = {'pages': json.loads(tree.xpath(self.config.pages)[0]), 'data': []}
 
         for li in lis:
             cleaner = self.cleaner_li()
-            tmp = {}
-            tmp['snippet'] = etree.tostring(cleaner.clean_html(li), method="xml", encoding="UTF-8").decode()
+            tmp = {'snippet': etree.tostring(cleaner.clean_html(li), method="xml", encoding="UTF-8").decode()}
+
             tree_temp = fromstring(tmp['snippet'], features="html.parser")
             href = tree_temp.xpath(self.config.href)
+            tmp['text'] = "\n".join(etree.XPath("//text()")(tree_temp))
             tmp['href'] = href[0]
+
             title = tree_temp.xpath(self.config.title)
             tmp['title'] = title[0]
 
@@ -57,7 +53,3 @@ class Parse:
         cleaner.safe_attrs = ['href']
 
         return cleaner
-
-
-if __name__ == "__main__":
-    pass

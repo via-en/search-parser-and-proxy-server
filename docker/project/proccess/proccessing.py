@@ -6,7 +6,6 @@ from urllib.parse import urlencode, quote_plus
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
 
-from helper.config import Config
 from parse.parsing import Parse
 from spider.spider import Spider
 from mongo_structures.utils import init_connection
@@ -14,9 +13,8 @@ from mongo_structures.models import Post
 import hashlib
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
-config_path = os.path.join(CURRENT_DIR,'..', 'config')
-logging.config.fileConfig(os.path.join(config_path, 'logging.conf'))
-#logger = logging.getLogger(__name__)
+config_path = os.path.join(CURRENT_DIR, '..', 'config')
+
 
 class Process:
     def __init__(self, main_config, searcher, params):
@@ -44,11 +42,9 @@ class Process:
                             payload.update({'p': page_next})
                             self.get_query(payload)
                         else:
-                            #self._logger.debug(self.main_result)
                             break
                     except Exception as err:
                         self._logger.debug(err)
-                        #self._logger.debug(self.main_result)
                         break
 
                 else:
@@ -57,7 +53,6 @@ class Process:
                     except Exception as err:
                         self._logger.debug(payload)
                         self._logger.debug(err)
-                        #self._logger.debug(self.main_result)
                         break
 
         try:
@@ -73,66 +68,53 @@ class Process:
         init_connection(connection_url)
 
         for record in self.main_result:
-            #self._logger.debug(record['data'])
             for index, d in enumerate(record['data'], 1):
                 uniq_id = hashlib.md5((d['href'] + '_' + d['snippet']).encode('utf-8')).hexdigest()
-                item = Post()
-                item.Sntag = self.params['snTag']
-                item.WorkflowId = self.params['workflowID']
-                item.CrawlId = [self.params['CrawlId']]
-                item.LoadDate = datetime.datetime.now()
-                item.Title = d['title']
-                item.Text = d['snippet']
-                item.URL = d['href']
-                item.ID = uniq_id
-                item.HashTags = [payload['text']]
-                item.spamWeight = index * (payload.get('p', 0) + 1)
-                item.PostType = 1
-
-                self._logger.debug(item.__dict__)
-
                 if not Post.objects(ID=uniq_id).count():
-                    record_id = item.save()
-                    self._logger.debug("record saved")
+                    item = Post()
+                    item.Sntag = self.params['snTag']
+                    if self.params['workflowID']:
+                        item.WorkflowId = self.params['workflowID']
+
+                    item.CrawlId = [self.params['CrawlId']]
+                    item.LoadDate = datetime.datetime.now()
+                    item.Title = d['title']
+                    item.Text = d['text']
+                    item.URL = d['href']
+                    item.ID = uniq_id
+                    item.HashTags = [payload['text']]
+                    item.spamWeight = index * (payload.get('p', 0) + 1)
+                    item.PostType = 1
+                    self._logger.debug(item.__dict__)
+                    item.save()
+                    self._logger.debug("record saved with ID {}".format(uniq_id))
+                else:
+                    Post.objects(ID=uniq_id).update_one(add_to_set__CrawlId=self.params['CrawlId'])
+                    if self.params['workflowID']:
+                        Post.objects(ID=uniq_id).update_one(add_to_set__CrawlId=self.params['CrawlId'],
+                                                            add_to_set__WorkflowId=self.params['workflowID'])
+                    else:
+                        Post.objects(ID=uniq_id).update_one(add_to_set__CrawlId=self.params['CrawlId'])
+
+                    self._logger.debug("record update with ID {}".format(uniq_id))
 
     def get_query(self, payload):
 
         url_format = urlencode(payload, quote_via=quote_plus)
 
         url = "search/?{}".format(url_format)
-        self._logger.debug(url)
+        pages_result = {}
+
         try:
-            pages_result = self.sp.load(url)
-            #self._logger.debug(pages_result)
-        except Exception as err:
-            self._logger.debug(err)
-            raise err
-
-        # load firts page from parser
-        # pages_result={'document', 'url'}
-        parse = Parse(pages_result['document'], config_path=config_path)
-        parse.make()
-        # parse.result = {'pages', 'data'={'snippet', 'href'}}
-        pages_result.update(parse.result)
-        self.main_result.append(pages_result)
-
-
-if __name__ == "__main__":
-
-    conf = Config.setup_main_config(os.path.join(config_path, 'main_local.yml'))
-    main_config = {'service_agent_conf_path': conf.service_agent_conf_path,
-                                     'mongo': {'host_addr': conf.post_proccess.yandex_task.mongo.host_url,
-                                               'db_name': conf.post_proccess.yandex_task.mongo.database,
-                                               'collection': conf.post_proccess.yandex_task.mongo.collection
-                                               }
-                  }
-
-    params = {'snTag': 'YA', 'CrawlId': "YA-1234"}
-
-    payload = {'text': 'пластиковые окна в москве'}
-
-    params = {'snTag': 'YA', 'CrawlId':"YA-1234"}
-    process = Process(main_config=main_config,  searcher="https://yandex.ru/", params=params)
-    process.create_query(payload, pages=2)
+            if self.sp:
+                pages_result = self.sp.load(url)
+        except Exception:
+            self._logger.error("Can't load page {} ".format(url))
+        else:
+            if pages_result:
+                parse = Parse(pages_result['document'], config_path=config_path)
+                parse.make()
+                pages_result.update(parse.result)
+                self.main_result.append(pages_result)
 
 
