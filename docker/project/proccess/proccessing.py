@@ -77,7 +77,6 @@ class Process:
                         item.WorkflowId = self.params['workflowID']
 
                     item.CrawlId = [self.params['CrawlId']]
-                    item.CreatedDate = self.params['CreatedDate']
                     item.LoadDate = datetime.datetime.now()
                     item.Title = d['title']
                     item.Text = d['text']

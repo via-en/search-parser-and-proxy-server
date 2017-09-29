@@ -22,8 +22,7 @@ class SomeTaskManager(TaskManager):
   def _callback(self, task):
     self._logger.debug(task.crawlID)
 
-    params = {'snTag': task.snTag, 'CrawlId': task.crawlID, 'workflowID': task.workflowID,
-              'CreatedDate': task.CreatedDate}
+    params = {'snTag': task.snTag, 'CrawlId': task.crawlID, 'workflowID': task.workflowID}
     payload = {'text': task.search_q}
 
     patch_record_factory(sn_tag=task.snTag, version='0.1.1', crawl_id=task.crawlID)
