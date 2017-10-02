@@ -78,6 +78,7 @@ class Process:
 
                     item.CrawlId = [self.params['CrawlId']]
                     item.LoadDate = datetime.datetime.now()
+                    item.CreatedDate = datetime.datetime.now()
                     item.Title = d['title']
                     item.Text = d['text']
                     item.URL = d['href']

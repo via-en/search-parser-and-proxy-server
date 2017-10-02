@@ -20,7 +20,7 @@ task_factory = CrawlerTaskFactory(rabbit_config, task_base)
 # Отправка тасков
 # обязательные поля
 task = {
-  'mongoServerName': 'mongodb://172.17.100.169:28015',
+  'mongoServerName': 'mongodb://172.17.100.168:27017',
   'mongoDataBaseName': 'YandexData',
   'mongoCollectionName': 'Posts',
   'snTag': 'YA',
