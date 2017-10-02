@@ -23,7 +23,6 @@ class SomeTaskManager(TaskManager):
     self._logger.debug(task.crawlID)
 
     params = {'snTag': task.snTag, 'CrawlId': task.crawlID, 'workflowID': task.workflowID}
-    payload = {'text': task.search_q}
 
     patch_record_factory(sn_tag=task.snTag, version='0.1.1', crawl_id=task.crawlID)
     self._logger.info('start processing', extra={'title': 'Crowling'})
@@ -33,8 +32,9 @@ class SomeTaskManager(TaskManager):
                         'collection': task.mongoCollectionName
                        }
              }
-
-    process = Process(main_config=config, searcher="https://yandex.ru/", params=params)
-    self._logger.info('start processing', extra={'title': 'Crowling'})
-    process.create_query(payload, pages=task.count)
-    self._logger.info('end processing', extra={'title': 'Crowling'})
+    for query in task.search_q:
+        payload = {'text': query}
+        process = Process(main_config=config, searcher="https://yandex.ru/", params=params)
+        self._logger.info('start processing', extra={'title': 'Crowling'})
+        process.create_query(payload, pages=task.count)
+        self._logger.info('end processing', extra={'title': 'Crowling'})
