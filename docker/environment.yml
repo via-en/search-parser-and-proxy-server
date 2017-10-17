@@ -15,6 +15,7 @@ dependencies:
 - yaml=0.1.6=0
 - zlib=1.2.8=3
 - pip:
+  - python-consul==0.7.2
   - asn1crypto==0.22.0
   - beautifulsoup4==4.6.0
   - cssselect==1.0.1
@@ -48,5 +49,5 @@ dependencies:
   - six==1.10.0
   - uritemplate==3.0.0
   - urllib3==1.22
-prefix: /home/lenovo/miniconda3/envs/test
+#prefix: /home/kkg/conda/envs/test
 
